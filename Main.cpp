@@ -36,22 +36,18 @@ json leerJSON_Aviones() {
         std::string vuelo = aviones["vuelo"];
         std::string numero_Registro = aviones["numero_de_registro"];
         std::string modelo = aviones["modelo"];
-        std::string fabricante = aviones["fabricante"];
-        int ano_fabricacion = aviones["ano_fabricacion"];
         int capacidad = aviones["capacidad"];
-        int peso_maximo = aviones["peso_max_despegue"];
         std::string aerolinea = aviones["aerolinea"];
         std::string estado = aviones["estado"];
+        std::string destino = aviones["ciudad_destino"];
 
     //MOSTRAR LOS DATOS DEL JSCON CARGADOS
         std::cout<< vuelo<< std::endl;
         std::cout<< numero_Registro<< std::endl;
         std::cout<< modelo<< std::endl;
-        std::cout<< fabricante<< std::endl;
-        std::cout<< ano_fabricacion<< std::endl;
         std::cout<< capacidad<< std::endl;
-        std::cout<< peso_maximo<< std::endl;
         std::cout<< aerolinea<< std::endl;
+        std::cout<< destino<< std::endl;
         std::cout<< estado<< std::endl;
         std::cout<< "-------------------------------------------------------------"<< std::endl;
 
@@ -61,7 +57,6 @@ json leerJSON_Aviones() {
      return jsonData; // Retornar los datos JSON leídos
 
 }
-
 
 
 
@@ -76,7 +71,7 @@ int main(int argc, char const *argv[])
     while (exit)
     {
         std::cout << "||------------- Menu -------------||" << std::endl;
-        std::cout << "|| 1. CARGAR AVIONES.             ||" << std::endl; 
+        std::cout << "|| 1. CARGAR AVIONES.             ||" << std::endl; //carga de archivo, falta implementacion de estructuras (arbol b y lista cricular)
         std::cout << "|| 2. CARGAR PILOTOS.             ||" << std::endl; 
         std::cout << "|| 3. CARGA RUTAS.                ||" << std::endl; 
         std::cout << "|| 4. CARGAR MOVIMIENTOS.         ||" << std::endl; 
