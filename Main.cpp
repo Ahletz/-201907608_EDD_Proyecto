@@ -64,26 +64,31 @@ json leerJSON_Aviones() {
 
 }
 
+void Mensaje()
+{
+    std::cout << "||------------- Menu -------------||" << std::endl;
+    std::cout << "|| 1. CARGAR AVIONES.             ||" << std::endl; //carga de archivo, falta implementacion de estructuras (arbol b y lista cricular)
+    std::cout << "|| 2. CARGAR PILOTOS.             ||" << std::endl; 
+    std::cout << "|| 3. CARGA RUTAS.                ||" << std::endl; 
+    std::cout << "|| 4. CARGAR MOVIMIENTOS.         ||" << std::endl; 
+    std::cout << "|| 5. CONSULTA HORAS DE VUELO.    ||" << std::endl;
+    std::cout << "|| 6. RECOMENDAR RUTA             ||" << std::endl; 
+    std::cout << "|| 7. VISUALIZAR REPORTES.        ||" << std::endl; 
+    std::cout << "|| 8. SALIR.                      ||" << std::endl; 
+
+}
+
 
 int main(int argc, char const *argv[])
 {   
 
     bool exit = true; // VARIABLE DE SALIDA DEL CICLO
-    int seleccion; //variable seleccion de menu
-    
-   
-
+ 
     while (exit)
     {
-        std::cout << "||------------- Menu -------------||" << std::endl;
-        std::cout << "|| 1. CARGAR AVIONES.             ||" << std::endl; //carga de archivo, falta implementacion de estructuras (arbol b y lista cricular)
-        std::cout << "|| 2. CARGAR PILOTOS.             ||" << std::endl; 
-        std::cout << "|| 3. CARGA RUTAS.                ||" << std::endl; 
-        std::cout << "|| 4. CARGAR MOVIMIENTOS.         ||" << std::endl; 
-        std::cout << "|| 5. CONSULTA HORAS DE VUELO.    ||" << std::endl;
-        std::cout << "|| 6. RECOMENDAR RUTA             ||" << std::endl; 
-        std::cout << "|| 7. VISUALIZAR REPORTES.        ||" << std::endl; 
-        std::cout << "|| 8. SALIR.                      ||" << std::endl; 
+        int seleccion; //variable seleccion de menu     
+
+        Mensaje(); //llamamos la presentacion del mensaje
 
         std::cin >> seleccion; //INGRESAR EL NUMERO SELECCIONADO DE LA OPCION
 
@@ -106,7 +111,8 @@ int main(int argc, char const *argv[])
             
             break;
         case 2:
-            std::cout << "|| OPCION 2. CARGA DE PILOTOS. ||" << std::endl; 
+            std::cout << "|| OPCION 2. CARGA DE PILOTOS. ||" << std::endl;
+            Circular.Mostrar(); 
             break;
         case 3:
             std::cout << "|| OPCION 3. CARGA DE RUTAS. ||" << std::endl; 
@@ -123,8 +129,10 @@ int main(int argc, char const *argv[])
             break;
         
         case 7:
+
             std::cout << "|| OPCION 7. VISUALIZAR REPORTES. ||" << std::endl; 
             Circular.Reporte();
+
             break;
         
         case 8:

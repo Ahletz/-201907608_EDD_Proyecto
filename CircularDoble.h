@@ -179,15 +179,83 @@ class CircularDoble
     // Cerrar el archivo
     archivo.close();
 
-    std::cout << "El archivo se escribió correctamente." << std::endl;
+   system("dot -Tpng listaCircularDoble.dot -o listaCircularDoble.png");
+   system("start listaCircularDoble.png");
 
-    //crear y abrir el archivo.dot
-    std::string command = "dot -Tpng listaCircularDoble.dot -o listaCircularDoble.png";
-    system(command.c_str());
+}
 
-    
-    std::string open = "start listaCircularDoble.png";  // En Windows
-    system(open.c_str());
+//funcion recuperar datos 
+std::string ObtenerString(const std::string& numero_registro,const std::string& dato)
+{
+    if (head == nullptr)
+        {
+            std::cout<< "LISTA VACIA, NO SE ENCUENTRA NINGUN ELEMENTO DENTRO!"<< std::endl;
+            return;
+        }
+        NodoCircularD* current = head; //variuable currrent apuntador de la cabeza de la lista
+
+        //ciclo que recorre la lista
+        do
+        {   
+           
+           if (numero_registro == current->numero_Registro)
+           {
+
+            if (dato == "vuelo")
+            {
+                return current->vuelo;
+
+            }else if (dato == "modelo")
+            {
+                return current->modelo;
+
+            }else if (dato == "aerolinea")
+            {
+               return current->aerolinea;
+
+            }
+            else if (dato == "destino")
+            {
+                return current->destino;
+
+            }    
+            
+           }
+
+            current = current -> next; //cambiamos al siguiente nodo que este apuntando
+
+        } while (current != head); // si la variable ya no apunta a la cabeza y apunta a nulo termina ciclo      
+
+}
+
+//obtener int
+int Obtenerint(const std::string& numero_registro,const std::string& dato)
+{
+    if (head == nullptr)
+        {
+            std::cout<< "LISTA VACIA, NO SE ENCUENTRA NINGUN ELEMENTO DENTRO!"<< std::endl;
+            return;
+        }
+        NodoCircularD* current = head; //variuable currrent apuntador de la cabeza de la lista
+
+        //ciclo que recorre la lista
+        do
+        {   
+           
+           if (numero_registro == current->numero_Registro)
+           {
+
+            if (dato == "capacidad")
+            {
+                return current->capacidad;
+
+            }  
+            
+           }
+
+            current = current -> next; //cambiamos al siguiente nodo que este apuntando
+
+        } while (current != head); // si la variable ya no apunta a la cabeza y apunta a nulo termina ciclo      
 
 }
 
