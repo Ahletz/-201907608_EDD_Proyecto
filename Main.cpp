@@ -1,14 +1,17 @@
 #include <iostream>
-#include <fstream>
 #include "json.hpp"
 
+#include "CircularDoble.h" //incluir clase lista circular doble
+
 using json = nlohmann::json;
+
+CircularDoble Circular;
 
 json leerJSON_Aviones() {
     
     std::string documento; //variable con nombre del documento
 
-    std::cout << "INGRESE LA RUTA DEL ARCHIVO: " << std::endl;
+    std::cout << "INGRESE LA RUTA DEL ARCHIVO: " << std::endl; //ruta: C:/Users/ludwi/OneDrive/Escritorio/-201907608_EDD_Proyecto/aviones.json
     std::cin >> documento; //INGRESAR EL NUMERO SELECCIONADO DE LA OPCION
 
     std::cout << "ruta: " <<documento<< std::endl;
@@ -41,6 +44,9 @@ json leerJSON_Aviones() {
         std::string estado = aviones["estado"];
         std::string destino = aviones["ciudad_destino"];
 
+        //agregar a la lista circular doble
+        Circular.agragar(vuelo,numero_Registro,modelo,capacidad,aerolinea,estado,destino);
+
     //MOSTRAR LOS DATOS DEL JSCON CARGADOS
         std::cout<< vuelo<< std::endl;
         std::cout<< numero_Registro<< std::endl;
@@ -57,7 +63,6 @@ json leerJSON_Aviones() {
      return jsonData; // Retornar los datos JSON leídos
 
 }
-
 
 
 int main(int argc, char const *argv[])
@@ -119,6 +124,7 @@ int main(int argc, char const *argv[])
         
         case 7:
             std::cout << "|| OPCION 7. VISUALIZAR REPORTES. ||" << std::endl; 
+            Circular.Reporte();
             break;
         
         case 8:
