@@ -20,7 +20,6 @@ struct Avion {
 };
 
 //nodo del arbol b
-
 class BTreeNode { //clase nodo 
 
 public:

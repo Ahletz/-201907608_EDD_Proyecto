@@ -2,10 +2,13 @@
 #include "json.hpp"
 
 #include "CircularDoble.h" //incluir clase lista circular doble
+#include "ArbolB.h" //incluimos el arbol B
 
 using json = nlohmann::json;
 
 CircularDoble Circular;
+
+Avion datos;
 
 json leerJSON_Aviones() {
     
@@ -64,6 +67,60 @@ json leerJSON_Aviones() {
 
 }
 
+//carga de json con pilotos y su informacion
+json leerJSON_Pilotos() {
+    
+    std::string documento; //variable con nombre del documento
+
+    std::cout << "INGRESE LA RUTA DEL ARCHIVO: " << std::endl; //ruta: C:/Users/ludwi/OneDrive/Escritorio/-201907608_EDD_Proyecto/aviones.json
+    std::cin >> documento; //INGRESAR EL NUMERO SELECCIONADO DE LA OPCION
+
+    std::cout << "ruta: " <<documento<< std::endl;
+
+    std::ifstream inputFile(documento);
+    json jsonData;
+
+    if (inputFile.is_open()) {
+        inputFile >> jsonData;
+        inputFile.close();
+    } else {
+        std::cerr << "No se pudo abrir el archivo: " << std::endl;
+        throw std::runtime_error("Archivo no encontrado");
+    }
+
+     // Mostrar el contenido del JSON
+    //std::cout << jsonData.dump(4) << std::endl;
+    std::cout<< "DATOS QUE SER CARGARON: "<< std::endl;
+    std::cout<< "-------------------------------------------------------------"<< std::endl;
+
+    // Acceder a los elementos del JSON
+    for (const auto& piloto : jsonData) {
+
+        //OBTENER LOS ELEMENTOS DEL JSON AVIONES
+        std::string nombre = piloto["nombre"];
+        std::string nacionalidad = piloto["nacionalidad"];
+        std::string id = piloto["numero_de_id"];
+        int horas = piloto["horas_de_vuelo"];
+        std::string vuelo = piloto["vuelo"];
+        std::string licencia = piloto["tipo_de_licencia"];
+
+      
+    //MOSTRAR LOS DATOS DEL JSCON CARGADOS
+        std::cout<< nombre<< std::endl;
+        std::cout<< nacionalidad<< std::endl;
+        std::cout<< id<< std::endl;
+        std::cout<< vuelo<< std::endl;
+        std::cout<< horas<< std::endl;
+        std::cout<< licencia<< std::endl;
+        std::cout<< "-------------------------------------------------------------"<< std::endl;
+
+        
+    }
+
+     return jsonData; // Retornar los datos JSON leídos
+
+}
+
 void Mensaje()
 {
     std::cout << "||------------- Menu -------------||" << std::endl;
@@ -112,7 +169,13 @@ int main(int argc, char const *argv[])
             break;
         case 2:
             std::cout << "|| OPCION 2. CARGA DE PILOTOS. ||" << std::endl;
-            Circular.Mostrar(); 
+
+            try {
+                    json pasajerosData = leerJSON_Pilotos();
+            } catch (const std::runtime_error& e) {
+                    std::cerr << "Error: " << e.what() << std::endl;
+                
+            }
             break;
         case 3:
             std::cout << "|| OPCION 3. CARGA DE RUTAS. ||" << std::endl; 
