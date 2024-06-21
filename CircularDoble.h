@@ -2,7 +2,6 @@
 #define LISTA_CIRCULAR
 #include <fstream> //para la creacion del archivo reporte
 #include <cstdlib>  // Para system()
-
 #include <iostream>
 
 //LISTA CIRCULAR DOBLEMENTE ENLAZADA
@@ -260,7 +259,6 @@ int Obtenerint(const std::string& numero_registro,const std::string& dato)
 }
 
 };
-
 
 
 #endif

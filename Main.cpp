@@ -131,8 +131,6 @@ int main(int argc, char const *argv[])
         case 7:
 
             std::cout << "|| OPCION 7. VISUALIZAR REPORTES. ||" << std::endl; 
-            Circular.Reporte();
-
             break;
         
         case 8:
