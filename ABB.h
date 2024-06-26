@@ -2,6 +2,7 @@
 #define ARBOL_BB
 
 #include <iostream>
+#include <fstream>
 #include <string>
 
 using namespace std;
@@ -15,23 +16,21 @@ struct Piloto {
     int horas_de_vuelo;
 };
 
-//nodo para esl arbol bb
+// Nodo para el árbol binario de búsqueda
 struct Nodo {
+    Piloto piloto; // Estructura del árbol
+    Nodo* izquierda; // Apuntador izquierda
+    Nodo* derecha; // Apuntador derecha
 
-    Piloto piloto; //estructura del arbol
-    Nodo* izquierda; // apuntador izquierda
-    Nodo* derecha; //apuntador derecha
-
-    Nodo(Piloto p) : piloto(p), izquierda(nullptr), derecha(nullptr) {} //contructor del nodo
+    Nodo(Piloto p) : piloto(p), izquierda(nullptr), derecha(nullptr) {} // Constructor del nodo
 };
 
-//clase arbol de busqueda binaria
+// Clase árbol de búsqueda binaria
 class ArbolDeBusquedaBinaria {
-
 private:
-    Nodo* raiz; //raiz del nodo
+    Nodo* raiz; // Raíz del nodo
 
-    //agregar nuevo nodo al arbol
+    // Agregar nuevo nodo al árbol
     void agregar(Nodo*& nodo, Piloto p) {
         if (nodo == nullptr) {
             nodo = new Nodo(p);
@@ -42,7 +41,7 @@ private:
         }
     }
 
-    //eliminar nodo del arbol
+    // Eliminar nodo del árbol
     Nodo* eliminar(Nodo* nodo, int horas_de_vuelo) {
         if (nodo == nullptr) return nodo;
 
@@ -101,8 +100,30 @@ private:
              << ", Tipo de Licencia: " << p.tipo_de_licencia << ", Horas de Vuelo: " << p.horas_de_vuelo << endl;
     }
 
-public:
+    // Función recursiva para generar código Graphviz
+    void graficarNodo(ofstream& archivo, Nodo* nodo) {
+        if (nodo == nullptr) return;
 
+        // Graficar el nodo actual
+        archivo << "    \"" << nodo->piloto.numero_de_id << "\" [label=\""
+                << nodo->piloto.nombre << "\\n" << nodo->piloto.horas_de_vuelo << "\"];" << endl;
+
+        // Graficar la conexión con el hijo izquierdo
+        if (nodo->izquierda != nullptr) {
+            archivo << "    \"" << nodo->piloto.numero_de_id << "\" -> \""
+                    << nodo->izquierda->piloto.numero_de_id << "\" [label=\"izquierda\"];" << endl;
+            graficarNodo(archivo, nodo->izquierda);
+        }
+
+        // Graficar la conexión con el hijo derecho
+        if (nodo->derecha != nullptr) {
+            archivo << "    \"" << nodo->piloto.numero_de_id << "\" -> \""
+                    << nodo->derecha->piloto.numero_de_id << "\" [label=\"derecha\"];" << endl;
+            graficarNodo(archivo, nodo->derecha);
+        }
+    }
+
+public:
     ArbolDeBusquedaBinaria() : raiz(nullptr) {}
 
     void agregar(Piloto p) {
@@ -124,7 +145,20 @@ public:
     void mostrarPostorden() {
         mostrarPostorden(raiz);
     }
-};
 
+    // Método para graficar el árbol en Graphviz
+    void graficarArbol(const string& nombreArchivo) {
+        ofstream archivo(nombreArchivo);
+        archivo << "digraph G {" << endl;
+        archivo << "    node [shape=record];" << endl;
+
+        if (raiz != nullptr) {
+            graficarNodo(archivo, raiz);
+        }
+
+        archivo << "}" << endl;
+        archivo.close();
+    }
+};
 
 #endif

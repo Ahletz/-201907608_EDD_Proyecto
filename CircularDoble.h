@@ -166,7 +166,7 @@ class CircularDoble
 
      if (head == nullptr)
         {
-            std::cout<< "LISTA VACIA, NO SE ENCUENTRA NINGUN ELEMENTO DENTRO!"<< std::endl;
+            std::cout<< "LISTA CIRCULAR VACIA, NO SE ENCUENTRA NINGUN ELEMENTO DENTRO!"<< std::endl;    
             return;
         }
 
@@ -203,7 +203,7 @@ class CircularDoble
 
         //ultimo apuntador inicio a final
         
-        contenido +="nodo0 -> nodo"+std::to_string(contador)+";"; //apunta primero al ultimo
+        contenido +="nodo0 -> nodo"+std::to_string(contador-1)+";"; //apunta primero al ultimo
 
         contenido +="nodo"+std::to_string(contador) +"->"+"nodo 0;"; //apunta ultimo al primero
 
