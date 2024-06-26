@@ -154,6 +154,8 @@ class CircularDoble
         return;
     }
 
+    int contador = 0;
+
     // Crear una variable string vacía
     std::string contenido;
 
@@ -168,7 +170,44 @@ class CircularDoble
             return;
         }
 
-        contenido += "A->B" ;
+         NodoCircularD* current = head; //variuable currrent apuntador de la cabeza de la lista
+
+        //ciclo que recorre la lista
+        do
+        {   
+            //std::cout<< ""<< std::endl;
+
+            //llenar contenido
+            std::string nodo = std::to_string(contador); //numero del nodo
+
+           contenido += "nodo" + nodo + "[label=\""+current->numero_Registro+" \"];"; //contenido del nodo y creacion de los nodos
+
+            contador ++; //aumento del contador
+            current = current -> next; //cambiamos al siguiente nodo que este apuntando
+
+        } while (current != head); // si la variable ya no apunta a la cabeza y apunta a nulo termina ciclo
+
+        //llenando apuntadores
+        for ( int i = 0; i <= contador; i++)
+        {
+            contenido +="nodo"+std::to_string(i) +"->"+"nodo"+std::to_string(i+1)+";"; //apuntar al siguiente
+            
+        }
+
+        //llenado apuntadores regreso
+        for ( int i = contador; i >= 0; i--)
+        {
+            contenido +="nodo"+std::to_string(i) +"->"+"nodo"+std::to_string(i-1)+";"; //apuntar al anterior
+            
+        }
+
+        //ultimo apuntador inicio a final
+        
+        contenido +="nodo0 -> nodo"+std::to_string(contador)+";"; //apunta primero al ultimo
+
+        contenido +="nodo"+std::to_string(contador) +"->"+"nodo 0;"; //apunta ultimo al primero
+
+
 
         contenido += "}" ;
 
@@ -188,8 +227,9 @@ std::string ObtenerString(const std::string& numero_registro,const std::string& 
 {
     if (head == nullptr)
         {
-            std::cout<< "LISTA VACIA, NO SE ENCUENTRA NINGUN ELEMENTO DENTRO!"<< std::endl;
-            return;
+            std::string mensaje = "LISTA VACIA, NO SE ENCUENTRA NINGUN ELEMENTO DENTRO!";
+
+             return mensaje;
         }
         NodoCircularD* current = head; //variuable currrent apuntador de la cabeza de la lista
 
@@ -223,7 +263,9 @@ std::string ObtenerString(const std::string& numero_registro,const std::string& 
 
             current = current -> next; //cambiamos al siguiente nodo que este apuntando
 
-        } while (current != head); // si la variable ya no apunta a la cabeza y apunta a nulo termina ciclo      
+        } while (current != head); // si la variable ya no apunta a la cabeza y apunta a nulo termina ciclo   
+
+        return "";   
 
 }
 
@@ -233,7 +275,7 @@ int Obtenerint(const std::string& numero_registro,const std::string& dato)
     if (head == nullptr)
         {
             std::cout<< "LISTA VACIA, NO SE ENCUENTRA NINGUN ELEMENTO DENTRO!"<< std::endl;
-            return;
+            return -1;
         }
         NodoCircularD* current = head; //variuable currrent apuntador de la cabeza de la lista
 

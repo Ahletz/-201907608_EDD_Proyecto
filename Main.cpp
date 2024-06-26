@@ -6,10 +6,11 @@
 
 using json = nlohmann::json;
 
+
+//estructuras
 CircularDoble Circular;
 
-Avion datos;
-
+//lectura archivos json aviones
 json leerJSON_Aviones() {
     
     std::string documento; //variable con nombre del documento
@@ -149,11 +150,6 @@ int main(int argc, char const *argv[])
 
         std::cin >> seleccion; //INGRESAR EL NUMERO SELECCIONADO DE LA OPCION
 
-        if (seleccion == 8)
-        {
-            
-        }
-
         switch (seleccion)
         {
         case 1:
@@ -194,6 +190,8 @@ int main(int argc, char const *argv[])
         case 7:
 
             std::cout << "|| OPCION 7. VISUALIZAR REPORTES. ||" << std::endl; 
+            Circular.Reporte();
+            return 0;
             break;
         
         case 8:
