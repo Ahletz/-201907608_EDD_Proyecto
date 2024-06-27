@@ -345,6 +345,9 @@ void BTree::graphviz(const string& filename) {
     }
     out << "}\n";
     out.close();
+
+    system("dot -Tpng ArbolB.dot -o ArbolB.png");
+    system("start ArbolB.png");
 }
 
 void BTree::graphvizHelper(ofstream& out, BTreeNode* node) {

@@ -9,6 +9,7 @@ using json = nlohmann::json;
 
 //estructuras
 CircularDoble Circular;
+BTree ArbolB (3);
 
 //lectura archivos json aviones
 json leerJSON_Aviones() {
@@ -48,8 +49,18 @@ json leerJSON_Aviones() {
         std::string estado = aviones["estado"];
         std::string destino = aviones["ciudad_destino"];
 
-        //agregar a la lista circular doble
-        Circular.agragar(vuelo,numero_Registro,modelo,capacidad,aerolinea,estado,destino);
+        
+
+        if (estado == "Disponible")
+        {
+            Avion avion = {vuelo, numero_Registro, modelo, capacidad, aerolinea, estado, destino};
+            ArbolB.insert(avion);
+        }else
+        {
+            //agregar a la lista circular doble
+            Circular.agragar(vuelo,numero_Registro,modelo,capacidad,aerolinea,estado,destino);
+        }
+        
 
     //MOSTRAR LOS DATOS DEL JSCON CARGADOS
         std::cout<< vuelo<< std::endl;
@@ -191,6 +202,7 @@ int main(int argc, char const *argv[])
 
             std::cout << "|| OPCION 7. VISUALIZAR REPORTES. ||" << std::endl; 
             Circular.Reporte();
+            ArbolB.graphviz("ArbolB.dot");
             return 0;
             break;
         
