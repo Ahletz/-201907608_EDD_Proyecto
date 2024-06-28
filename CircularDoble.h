@@ -51,7 +51,6 @@ class CircularDoble
         head = nullptr;
 
     }
-
     //metodo para mostrar contenido de la lista
     void Mostrar() 
     {
@@ -81,7 +80,7 @@ class CircularDoble
     }
 
     //metodo para mostrar contenido de la lista
-    void agragar(std::string& vuelo,std::string& numero_Registro, std::string& modelo, int capacidad, std::string& aerolinea, std::string& estado, std::string& destino)
+    void agregar(std::string& vuelo,std::string& numero_Registro, std::string& modelo, int capacidad, std::string& aerolinea, std::string& estado, std::string& destino)
     {
         //instanciando el nuevo nodo
         NodoCircularD* newNodo = new NodoCircularD(vuelo, numero_Registro, modelo, capacidad, aerolinea, estado, destino);
@@ -140,9 +139,6 @@ class CircularDoble
         
     }
 
-
-
-
      void Reporte() {
         
     // Crear un objeto de salida de archivo
@@ -162,7 +158,6 @@ class CircularDoble
     contenido += "digraph G {\n"
                         "    rankdir=LR;\n"
                         "    node [shape=record];\n";
-
 
      if (head == nullptr)
         {
@@ -206,8 +201,6 @@ class CircularDoble
         contenido +="nodo0 -> nodo"+std::to_string(contador-1)+";"; //apunta primero al ultimo
 
         contenido +="nodo"+std::to_string(contador) +"->"+"nodo 0;"; //apunta ultimo al primero
-
-
 
         contenido += "}" ;
 
@@ -281,8 +274,7 @@ int Obtenerint(const std::string& numero_registro,const std::string& dato)
 
         //ciclo que recorre la lista
         do
-        {   
-           
+        {        
            if (numero_registro == current->numero_Registro)
            {
 
@@ -297,10 +289,8 @@ int Obtenerint(const std::string& numero_registro,const std::string& dato)
             current = current -> next; //cambiamos al siguiente nodo que este apuntando
 
         } while (current != head); // si la variable ya no apunta a la cabeza y apunta a nulo termina ciclo      
-
 }
 
 };
-
 
 #endif

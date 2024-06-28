@@ -3,6 +3,8 @@
 
 #include "CircularDoble.h" //incluir clase lista circular doble
 #include "ArbolB.h" //incluimos el arbol B
+#include "ABB.h" //arbol binario de busqueda
+#include "Hash.h" //tabla hash
 
 using json = nlohmann::json;
 
@@ -10,6 +12,8 @@ using json = nlohmann::json;
 //estructuras
 CircularDoble Circular;
 BTree ArbolB (3);
+ArbolDeBusquedaBinaria Bb;
+TablaHash tabla; 
 
 //lectura archivos json aviones
 json leerJSON_Aviones() {
@@ -58,7 +62,7 @@ json leerJSON_Aviones() {
         }else
         {
             //agregar a la lista circular doble
-            Circular.agragar(vuelo,numero_Registro,modelo,capacidad,aerolinea,estado,destino);
+            Circular.agregar(vuelo,numero_Registro,modelo,capacidad,aerolinea,estado,destino);
         }
         
 
@@ -115,6 +119,12 @@ json leerJSON_Pilotos() {
         int horas = piloto["horas_de_vuelo"];
         std::string vuelo = piloto["vuelo"];
         std::string licencia = piloto["tipo_de_licencia"];
+
+        //AGREGAR A ESTRUCTURAS
+        Piloto datos ={nombre, nacionalidad,id,vuelo,licencia,horas};
+
+        Bb.agregar(datos);
+        tabla.agregar(datos);
 
       
     //MOSTRAR LOS DATOS DEL JSCON CARGADOS
@@ -203,6 +213,7 @@ int main(int argc, char const *argv[])
             std::cout << "|| OPCION 7. VISUALIZAR REPORTES. ||" << std::endl; 
             Circular.Reporte();
             ArbolB.graphviz("ArbolB.dot");
+            
             return 0;
             break;
         
