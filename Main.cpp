@@ -19,11 +19,16 @@ TablaHash tabla;
 json leerJSON_Aviones() {
     
     std::string documento; //variable con nombre del documento
+    std::string ruta = "C:/Users/ludwi/OneDrive/Escritorio/"; //ruta de archivo predefinido
 
     std::cout << "INGRESE LA RUTA DEL ARCHIVO: " << std::endl; //ruta: C:/Users/ludwi/OneDrive/Escritorio/-201907608_EDD_Proyecto/aviones.json
     std::cin >> documento; //INGRESAR EL NUMERO SELECCIONADO DE LA OPCION
 
-    std::cout << "ruta: " <<documento<< std::endl;
+    std::cout << "ruta: " <<ruta<< std::endl;
+
+    ruta = ruta + "/"+documento; //agregar el nombre del archivo a la ruta
+
+    std::cout << "ruta: " <<ruta<< std::endl; //imprimir ruta del archivo
 
     std::ifstream inputFile(documento);
     json jsonData;
@@ -87,13 +92,16 @@ json leerJSON_Aviones() {
 json leerJSON_Pilotos() {
     
     std::string documento; //variable con nombre del documento
+    std::string ruta = "C:/Users/ludwi/OneDrive/Escritorio/"; //ruta de archivo predefinido
 
     std::cout << "INGRESE LA RUTA DEL ARCHIVO: " << std::endl; //ruta: C:/Users/ludwi/OneDrive/Escritorio/-201907608_EDD_Proyecto/aviones.json
     std::cin >> documento; //INGRESAR EL NUMERO SELECCIONADO DE LA OPCION
 
-    std::cout << "ruta: " <<documento<< std::endl;
+    ruta = ruta + "/"+documento; //agregar el nombre del archivo a la ruta
 
-    std::ifstream inputFile(documento);
+    std::cout << "ruta: " <<ruta<< std::endl; //imprimir ruta del archivo
+
+    std::ifstream inputFile(ruta);
     json jsonData;
 
     if (inputFile.is_open()) {
@@ -147,14 +155,54 @@ void Mensaje()
 {
     std::cout << "||------------- Menu -------------||" << std::endl;
     std::cout << "|| 1. CARGAR AVIONES.             ||" << std::endl; //carga de archivo, falta implementacion de estructuras (arbol b y lista cricular)
-    std::cout << "|| 2. CARGAR PILOTOS.             ||" << std::endl; 
-    std::cout << "|| 3. CARGA RUTAS.                ||" << std::endl; 
-    std::cout << "|| 4. CARGAR MOVIMIENTOS.         ||" << std::endl; 
-    std::cout << "|| 5. CONSULTA HORAS DE VUELO.    ||" << std::endl;
-    std::cout << "|| 6. RECOMENDAR RUTA             ||" << std::endl; 
-    std::cout << "|| 7. VISUALIZAR REPORTES.        ||" << std::endl; 
-    std::cout << "|| 8. SALIR.                      ||" << std::endl; 
+    std::cout << "|| 2. CARGAR PILOTOS.             ||" << std::endl; //implementacion de tabla hash y arbol bb 
+    std::cout << "|| 3. CARGA RUTAS.                ||" << std::endl; //falta
+    std::cout << "|| 4. CARGAR MOVIMIENTOS.         ||" << std::endl; //falta
+    std::cout << "|| 5. CONSULTA HORAS DE VUELO.    ||" << std::endl; //agregar ordenes para mostrar datos en arbol bb
+    std::cout << "|| 6. RECOMENDAR RUTA             ||" << std::endl; //falta
+    std::cout << "|| 7. VISUALIZAR REPORTES.        ||" << std::endl; //reporte arbol b, lista circular y tabla hash (falta matriz y grafo)
+    std::cout << "|| 8. SALIR.                      ||" << std::endl; //salida exitosa
 
+}
+
+void Consulta_horas()
+{
+    bool salida = true; //variable para entrar y salir del ciclo del menu de ordenes
+    while (salida) //ciclo para mostrar los ordenes 
+    {
+        std::cout << "|| SELECCIONES UN ORDEN: -------------||" << std::endl;
+        std::cout << "|| 1. PREORDEN.                       ||" << std::endl; 
+        std::cout << "|| 2. INORDEN.                        ||" << std::endl; 
+        std::cout << "|| 3. POSTORDEN.                      ||" << std::endl;
+        std::cout << "|| 4. REGRESAR.                       ||" << std::endl;
+
+        int seleccion; //variable seleccion de menu     
+        std::cin >> seleccion; //INGRESAR EL NUMERO SELECCIONADO DE LA OPCION
+
+        switch (seleccion)
+        {
+        case 1:
+            Bb.mostrarPreorden();
+            break;
+        case 2:
+            Bb.mostrarInorden();
+            break;
+        case 3:
+            Bb.mostrarPostorden();
+            break;
+        case 4:
+            salida = false; //salir del sistema y volver al menu principal
+            break;
+        
+        default:
+
+             std::cout << "|| NO INGRESO UNA OPCION VALIDA, VUELVA A INGRESAR UNA OPCION QUE SI SEA VALIDA PORFAVOR.||" << std::endl;
+            break;
+        }
+
+    }
+    
+     
 }
 
 
@@ -201,7 +249,8 @@ int main(int argc, char const *argv[])
             std::cout << "|| OPCION 4. CARGA DE MOVIMIENTOS. ||" << std::endl; 
             break;
         case 5:
-            std::cout << "|| OPCION 5. CONSULTA DE HORA DE VUELO. ||" << std::endl; 
+            std::cout << "|| OPCION 5. CONSULTA DE HORA DE VUELO. ||" << std::endl;
+            Consulta_horas(); //funcion para llamar consulta de ordenes de horas 
             break;
         
         case 6:
@@ -213,6 +262,7 @@ int main(int argc, char const *argv[])
             std::cout << "|| OPCION 7. VISUALIZAR REPORTES. ||" << std::endl; 
             Circular.Reporte();
             ArbolB.graphviz("ArbolB.dot");
+            tabla.graficar("Hash.dot");
             
             return 0;
             break;

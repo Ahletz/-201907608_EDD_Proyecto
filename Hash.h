@@ -97,19 +97,23 @@ private:
     ListaEnlazada tabla[18];
     int tamanio;
 
-    int funcionDispersión(const string& llave) {
-        int suma = 0;
-        for (char c : llave) {
-            suma += c;
+    int funcionDispercion(const std::string& llave) {
+    if (llave.empty()) return 0;
+
+    int suma = static_cast<int>(llave[0]); // Valor ASCII del primer carácter
+    for (size_t i = 1; i < llave.size(); ++i) {
+        if (isdigit(llave[i])) {
+            suma += llave[i] - '0'; // Convertir el carácter a su valor decimal
         }
-        return suma % tamanio;
     }
+    return suma % tamanio;
+}
 
 public:
     TablaHash() : tamanio(18) {}
 
     void agregar(Piloto piloto) {
-        int indice = funcionDispersión(piloto.numero_de_id);
+        int indice = funcionDispercion(piloto.numero_de_id);
         tabla[indice].agregar(piloto);
     }
 
@@ -121,12 +125,12 @@ public:
     }
 
     Piloto* buscar(const string& numero_de_id) {
-        int indice = funcionDispersión(numero_de_id);
+        int indice = funcionDispercion(numero_de_id);
         return tabla[indice].buscar(numero_de_id);
     }
 
     void eliminar(const string& numero_de_id) {
-        int indice = funcionDispersión(numero_de_id);
+        int indice = funcionDispercion(numero_de_id);
         tabla[indice].eliminar(numero_de_id);
     }
 
@@ -139,6 +143,9 @@ public:
         }
         archivo << "}\n";
         archivo.close();
+
+        system("dot -Tpng Hash.dot -o Hash.png");
+        system("start Hash.png");
     }
 };
 

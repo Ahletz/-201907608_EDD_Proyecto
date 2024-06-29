@@ -17,23 +17,23 @@ struct Piloto {
 };
 
 // Nodo para el árbol binario de búsqueda
-struct Nodo {
+struct Nodo_Arbol {
     Piloto piloto; // Estructura del árbol
-    Nodo* izquierda; // Apuntador izquierda
-    Nodo* derecha; // Apuntador derecha
+    Nodo_Arbol* izquierda; // Apuntador izquierda
+    Nodo_Arbol* derecha; // Apuntador derecha
 
-    Nodo(Piloto p) : piloto(p), izquierda(nullptr), derecha(nullptr) {} // Constructor del nodo
+    Nodo_Arbol(Piloto p) : piloto(p), izquierda(nullptr), derecha(nullptr) {} // Constructor del nodo
 };
 
 // Clase árbol de búsqueda binaria
 class ArbolDeBusquedaBinaria {
 private:
-    Nodo* raiz; // Raíz del nodo
+    Nodo_Arbol* raiz; // Raíz del nodo
 
     // Agregar nuevo nodo al árbol
-    void agregar(Nodo*& nodo, Piloto p) {
+    void agregar(Nodo_Arbol*& nodo, Piloto p) {
         if (nodo == nullptr) {
-            nodo = new Nodo(p);
+            nodo = new Nodo_Arbol(p);
         } else if (p.horas_de_vuelo < nodo->piloto.horas_de_vuelo) {
             agregar(nodo->izquierda, p);
         } else {
@@ -42,7 +42,7 @@ private:
     }
 
     // Eliminar nodo del árbol
-    Nodo* eliminar(Nodo* nodo, int horas_de_vuelo) {
+    Nodo_Arbol* eliminar(Nodo_Arbol* nodo, int horas_de_vuelo) {
         if (nodo == nullptr) return nodo;
 
         if (horas_de_vuelo < nodo->piloto.horas_de_vuelo) {
@@ -51,43 +51,43 @@ private:
             nodo->derecha = eliminar(nodo->derecha, horas_de_vuelo);
         } else {
             if (nodo->izquierda == nullptr) {
-                Nodo* temp = nodo->derecha;
+                Nodo_Arbol* temp = nodo->derecha;
                 delete nodo;
                 return temp;
             } else if (nodo->derecha == nullptr) {
-                Nodo* temp = nodo->izquierda;
+                Nodo_Arbol* temp = nodo->izquierda;
                 delete nodo;
                 return temp;
             }
-            Nodo* temp = minValorNodo(nodo->derecha);
+            Nodo_Arbol* temp = minValorNodo(nodo->derecha);
             nodo->piloto = temp->piloto;
             nodo->derecha = eliminar(nodo->derecha, temp->piloto.horas_de_vuelo);
         }
         return nodo;
     }
 
-    Nodo* minValorNodo(Nodo* nodo) {
-        Nodo* actual = nodo;
+    Nodo_Arbol* minValorNodo(Nodo_Arbol* nodo) {
+        Nodo_Arbol* actual = nodo;
         while (actual && actual->izquierda != nullptr)
             actual = actual->izquierda;
         return actual;
     }
 
-    void mostrarPreorden(Nodo* nodo) {
+    void mostrarPreorden(Nodo_Arbol* nodo) {
         if (nodo == nullptr) return;
         mostrarPiloto(nodo->piloto);
         mostrarPreorden(nodo->izquierda);
         mostrarPreorden(nodo->derecha);
     }
 
-    void mostrarInorden(Nodo* nodo) {
+    void mostrarInorden(Nodo_Arbol* nodo) {
         if (nodo == nullptr) return;
         mostrarInorden(nodo->izquierda);
         mostrarPiloto(nodo->piloto);
         mostrarInorden(nodo->derecha);
     }
 
-    void mostrarPostorden(Nodo* nodo) {
+    void mostrarPostorden(Nodo_Arbol* nodo) {
         if (nodo == nullptr) return;
         mostrarPostorden(nodo->izquierda);
         mostrarPostorden(nodo->derecha);
@@ -101,7 +101,7 @@ private:
     }
 
     // Función recursiva para generar código Graphviz
-    void graficarNodo(ofstream& archivo, Nodo* nodo) {
+    void graficarNodo(ofstream& archivo, Nodo_Arbol* nodo) {
         if (nodo == nullptr) return;
 
         // Graficar el nodo actual
