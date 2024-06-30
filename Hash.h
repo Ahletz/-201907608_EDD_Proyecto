@@ -7,14 +7,7 @@
 
 using namespace std;
 
-struct Piloto {
-    string nombre;
-    string nacionalidad;
-    string numero_de_id;
-    string vuelo;
-    string tipo_de_licencia;
-    int horas_de_vuelo;
-};
+
 
 struct Nodo {
     Piloto piloto;

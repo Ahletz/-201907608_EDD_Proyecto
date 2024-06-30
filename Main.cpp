@@ -5,6 +5,7 @@
 #include "ArbolB.h" //incluimos el arbol B
 #include "ABB.h" //arbol binario de busqueda
 #include "Hash.h" //tabla hash
+#include "ListaD.h" //Lista de adyascencia 
 
 using json = nlohmann::json;
 
@@ -13,24 +14,23 @@ using json = nlohmann::json;
 CircularDoble Circular;
 BTree ArbolB (3);
 ArbolDeBusquedaBinaria Bb;
-TablaHash tabla; 
+TablaHash tabla;
+ListaEnlazadaD adyascencia; 
 
 //lectura archivos json aviones
 json leerJSON_Aviones() {
     
     std::string documento; //variable con nombre del documento
-    std::string ruta = "C:/Users/ludwi/OneDrive/Escritorio/"; //ruta de archivo predefinido
+    std::string ruta = "C:/Users/ludwi/OneDrive/Escritorio/-201907608_EDD_Proyecto/"; //ruta de archivo predefinido
 
     std::cout << "INGRESE LA RUTA DEL ARCHIVO: " << std::endl; //ruta: C:/Users/ludwi/OneDrive/Escritorio/-201907608_EDD_Proyecto/aviones.json
     std::cin >> documento; //INGRESAR EL NUMERO SELECCIONADO DE LA OPCION
 
-    std::cout << "ruta: " <<ruta<< std::endl;
-
-    ruta = ruta + "/"+documento; //agregar el nombre del archivo a la ruta
+    ruta = ruta +documento; //agregar el nombre del archivo a la ruta
 
     std::cout << "ruta: " <<ruta<< std::endl; //imprimir ruta del archivo
 
-    std::ifstream inputFile(documento);
+    std::ifstream inputFile(ruta);
     json jsonData;
 
     if (inputFile.is_open()) {
@@ -92,12 +92,12 @@ json leerJSON_Aviones() {
 json leerJSON_Pilotos() {
     
     std::string documento; //variable con nombre del documento
-    std::string ruta = "C:/Users/ludwi/OneDrive/Escritorio/"; //ruta de archivo predefinido
+    std::string ruta = "C:/Users/ludwi/OneDrive/Escritorio/-201907608_EDD_Proyecto/"; //ruta de archivo predefinido
 
     std::cout << "INGRESE LA RUTA DEL ARCHIVO: " << std::endl; //ruta: C:/Users/ludwi/OneDrive/Escritorio/-201907608_EDD_Proyecto/aviones.json
     std::cin >> documento; //INGRESAR EL NUMERO SELECCIONADO DE LA OPCION
 
-    ruta = ruta + "/"+documento; //agregar el nombre del archivo a la ruta
+    ruta = ruta +documento; //agregar el nombre del archivo a la ruta
 
     std::cout << "ruta: " <<ruta<< std::endl; //imprimir ruta del archivo
 
@@ -151,16 +151,57 @@ json leerJSON_Pilotos() {
 
 }
 
+void leerArchivo() {
+
+    std::string documento; //variable con nombre del documento
+    std::string ruta = "C:/Users/ludwi/OneDrive/Escritorio/-201907608_EDD_Proyecto/"; //ruta de archivo predefinido
+
+    std::cout << "INGRESE LA RUTA DEL ARCHIVO: " << std::endl; //ruta: C:/Users/ludwi/OneDrive/Escritorio/-201907608_EDD_Proyecto/aviones.json
+    std::cin >> documento; //INGRESAR EL NUMERO SELECCIONADO DE LA OPCION
+
+    ruta = ruta +documento; //agregar el nombre del archivo a la ruta
+
+    std::cout << "ruta: " <<ruta<< std::endl; //imprimir ruta del archivo
+
+    std::ifstream archivo(ruta);
+    if (!archivo.is_open()) {
+        std::cerr << "No se pudo abrir el archivo " << documento << std::endl;
+        return;
+    }
+
+    std::string linea;
+    while (std::getline(archivo, linea)) {
+        if (linea.back() == ';') {
+            linea.pop_back();  // Elimina el último carácter ';'
+        }
+        
+        std::istringstream stream(linea);
+        std::string origen, destino;
+        int distancia;
+        if (std::getline(stream, origen, '/') && std::getline(stream, destino, '/') && (stream >> distancia)) {
+
+            Ruta r = {origen, destino, distancia}; //se crea el objeto de estructura ruta 
+            
+            adyascencia.agregarRuta(r); //se agrega a la lista de adyascencia
+
+        } else {
+            std::cerr << "Formato incorrecto en la línea: " << linea << std::endl;
+        }
+    }
+
+    archivo.close();
+}
+
 void Mensaje()
 {
     std::cout << "||------------- Menu -------------||" << std::endl;
     std::cout << "|| 1. CARGAR AVIONES.             ||" << std::endl; //carga de archivo, falta implementacion de estructuras (arbol b y lista cricular)
     std::cout << "|| 2. CARGAR PILOTOS.             ||" << std::endl; //implementacion de tabla hash y arbol bb 
-    std::cout << "|| 3. CARGA RUTAS.                ||" << std::endl; //falta
+    std::cout << "|| 3. CARGA RUTAS.                ||" << std::endl; //se agrego una lista de adyascencia 
     std::cout << "|| 4. CARGAR MOVIMIENTOS.         ||" << std::endl; //falta
     std::cout << "|| 5. CONSULTA HORAS DE VUELO.    ||" << std::endl; //agregar ordenes para mostrar datos en arbol bb
     std::cout << "|| 6. RECOMENDAR RUTA             ||" << std::endl; //falta
-    std::cout << "|| 7. VISUALIZAR REPORTES.        ||" << std::endl; //reporte arbol b, lista circular y tabla hash (falta matriz y grafo)
+    std::cout << "|| 7. VISUALIZAR REPORTES.        ||" << std::endl; //reporte arbol b, lista circular, tabla hash y grafo rutas 
     std::cout << "|| 8. SALIR.                      ||" << std::endl; //salida exitosa
 
 }
@@ -206,6 +247,9 @@ void Consulta_horas()
 }
 
 
+
+
+
 int main(int argc, char const *argv[])
 {   
 
@@ -243,7 +287,8 @@ int main(int argc, char const *argv[])
             }
             break;
         case 3:
-            std::cout << "|| OPCION 3. CARGA DE RUTAS. ||" << std::endl; 
+            std::cout << "|| OPCION 3. CARGA DE RUTAS. ||" << std::endl;
+            leerArchivo(); //se lee el archivo de rutas 
             break;
         case 4:
             std::cout << "|| OPCION 4. CARGA DE MOVIMIENTOS. ||" << std::endl; 
@@ -263,6 +308,7 @@ int main(int argc, char const *argv[])
             Circular.Reporte();
             ArbolB.graphviz("ArbolB.dot");
             tabla.graficar("Hash.dot");
+            adyascencia.graficarGrafo("grafo.dot");
             
             return 0;
             break;
