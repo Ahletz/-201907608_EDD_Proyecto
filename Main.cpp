@@ -1,5 +1,9 @@
 #include <iostream>
 #include "json.hpp"
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <regex>
 
 #include "CircularDoble.h" //incluir clase lista circular doble
 #include "ArbolB.h" //incluimos el arbol B
@@ -199,6 +203,93 @@ void leerArchivo() {
     archivo.close();
 }
 
+void leerMovimientos() {
+
+    std::string documento; //variable con nombre del documento
+    std::string ruta = "C:/Users/ludwi/OneDrive/Escritorio/-201907608_EDD_Proyecto/"; //ruta de archivo predefinido
+
+    std::cout << "INGRESE LA RUTA DEL ARCHIVO: " << std::endl; //ruta: C:/Users/ludwi/OneDrive/Escritorio/-201907608_EDD_Proyecto/aviones.json
+    std::cin >> documento; //INGRESAR EL NUMERO SELECCIONADO DE LA OPCION
+
+    ruta = ruta +documento; //agregar el nombre del archivo a la ruta
+
+    std::cout << "ruta: " <<ruta<< std::endl; //imprimir ruta del archivo
+
+    std::ifstream archivo(ruta);
+
+    if (!archivo.is_open()) {
+        std::cerr << "No se pudo abrir el archivo " << documento << std::endl;
+        return;
+    }
+
+    std::string linea;
+    while (std::getline(archivo, linea)) {
+        if (linea.back() == ';') {
+            linea.pop_back();  // Elimina el último carácter ';'
+        }
+
+        if (linea.find("MantenimientoAviones") != std::string::npos) {
+            std::istringstream stream(linea);
+            std::string primer, segundo, tercero;
+            std::getline(stream, primer, ',');
+            std::getline(stream, segundo, ',');
+            std::getline(stream, tercero, ',');
+
+            std::cout << "Mantenimiento: " << segundo << ", ID: " << tercero << std::endl;
+
+            if (segundo == "Ingreso") //cambio de circular doble a albol b
+            {
+                std::cout << "INGRESO: " << segundo << ", ID: " << tercero << std::endl;
+
+                //se capturan los datos de la lista circular
+                std::string vuelo = Circular.ObtenerString(tercero,"vuelo");
+                std::string modelo = Circular.ObtenerString(tercero,"modelo");
+                std::string aerolinea = Circular.ObtenerString(tercero,"aerolinea");
+                std::string destino = Circular.ObtenerString(tercero,"destino");
+                int capacidad = Circular.Obtenerint(tercero);
+
+                Avion dato = {vuelo, tercero, modelo, capacidad, aerolinea, destino, "Disponible"}; //se crea una estructura avion
+
+                ArbolB.insert(dato); //se agrega al arbol b
+
+                Circular.eliminar(tercero); //se elimina de la lista circular doble
+            }else if (segundo == "Salida")
+            {
+                Avion dato = ArbolB.remove(tercero); //eliminamos y capturamos los datos del arbol b
+
+                std::string estado = "Mantenimiento";
+
+                Circular.agregar(dato.vuelo,tercero,dato.modelo,dato.capacidad,dato.aerolinea, estado, dato.ciudad_destino); //se agrega a la lista doble circular
+            }
+            
+            
+
+        } else if (linea.find("DarDeBaja") != std::string::npos) {
+            std::regex regex("\\(([^)]+)\\)");
+            std::smatch match;
+            if (std::regex_search(linea, match, regex)) {
+
+                std::cout << "ID para Dar de Baja: " << match[1] << std::endl;
+
+                std::string id = match[1];
+
+                //dar de baja al piloto en las estructuras
+                Piloto p = Bb.buscarPorId(id); //se busca las horas de vuelo de un piloto
+                Bb.eliminar(p.horas_de_vuelo); //se elimina el nodo por medio de las horas de vuelo
+                tabla.eliminar(id); //se elimina de la tabla hash
+                matrix.eliminarPiloto(id); //se elimina de la matriz de adyascencia
+
+            } else {
+                std::cerr << "Formato incorrecto en la línea: " << linea << std::endl;
+            }
+        } else {
+            std::cerr << "Formato desconocido en la línea: " << linea << std::endl;
+        }
+    }
+
+    archivo.close();
+}
+
 void Mensaje()
 {
     std::cout << "||------------- Menu -------------||" << std::endl;
@@ -299,6 +390,7 @@ int main(int argc, char const *argv[])
             break;
         case 4:
             std::cout << "|| OPCION 4. CARGA DE MOVIMIENTOS. ||" << std::endl; 
+            leerMovimientos();
             break;
         case 5:
             std::cout << "|| OPCION 5. CONSULTA DE HORA DE VUELO. ||" << std::endl;
@@ -312,11 +404,12 @@ int main(int argc, char const *argv[])
         case 7:
 
             std::cout << "|| OPCION 7. VISUALIZAR REPORTES. ||" << std::endl; 
-            Circular.Reporte();
+            Circular.graficarLista();
             ArbolB.graphviz("ArbolB.dot");
             tabla.graficar("Hash.dot");
             adyascencia.graficarGrafo("grafo.dot");
             matrix.graficarMatriz();
+            Bb.graficarArbol("Arbolbb.dot");
             
             return 0;
             break;

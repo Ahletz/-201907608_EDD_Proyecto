@@ -123,6 +123,23 @@ private:
         }
     }
 
+
+    // Función recursiva para buscar por ID
+    Piloto buscarPorId(Nodo_Arbol* nodo, const string& numero_de_id) {
+        if (nodo == nullptr) {
+            Piloto pilotoVacio; // Retornar un piloto vacío si no se encuentra
+            return pilotoVacio;
+        }
+
+        if (numero_de_id == nodo->piloto.numero_de_id) {
+            return nodo->piloto;
+        } else if (numero_de_id < nodo->piloto.numero_de_id) {
+            return buscarPorId(nodo->izquierda, numero_de_id);
+        } else {
+            return buscarPorId(nodo->derecha, numero_de_id);
+        }
+    }
+
 public:
     ArbolDeBusquedaBinaria() : raiz(nullptr) {}
 
@@ -146,6 +163,11 @@ public:
         mostrarPostorden(raiz);
     }
 
+    // Buscar piloto por ID
+    Piloto buscarPorId(const string& numero_de_id) {
+        return buscarPorId(raiz, numero_de_id);
+    }
+
     // Método para graficar el árbol en Graphviz
     void graficarArbol(const string& nombreArchivo) {
         ofstream archivo(nombreArchivo);
@@ -158,6 +180,9 @@ public:
 
         archivo << "}" << endl;
         archivo.close();
+
+        system("dot -Tpng Arbolbb.dot -o Arbolbb.png");
+        system("start Arbolbb.png");
     }
 };
 

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <set>
 
 // Nodo para la lista de pilotos
 struct PilotoID {
@@ -136,32 +137,69 @@ public:
         }
     }
 
-    // Método para graficar la matriz usando Graphviz
+    
+    // Método para graficar la matriz usando Graphviz en formato de matriz
+    // Método para graficar la matriz usando Graphviz en formato de matriz
     void graficarMatriz() {
         std::ofstream archivo("matriz.dot");
         archivo << "digraph G {\n";
-        archivo << "node [shape=box];\n";
+        archivo << "node [shape=plaintext];\n";
+        archivo << "tabla [label=<\n";
+        archivo << "<table border='1' cellborder='1' cellspacing='0'>\n";
 
+        // Recopilar todos los destinos únicos
+        std::set<std::string> destinosUnicos;
         VueloX* vueloPtr = vuelos;
         while (vueloPtr) {
             Destino* destinoPtr = vueloPtr->destinos;
             while (destinoPtr) {
-                PilotoID* pilotoPtr = destinoPtr->pilotos;
-                while (pilotoPtr) {
-                    archivo << "\"" << vueloPtr->codigo << "\" -> \"" << destinoPtr->nombre << "\" [label=\"" << pilotoPtr->id << "\"];\n";
-                    pilotoPtr = pilotoPtr->siguiente;
-                }
+                destinosUnicos.insert(destinoPtr->nombre);
                 destinoPtr = destinoPtr->siguiente;
             }
             vueloPtr = vueloPtr->siguiente;
         }
 
+        // Escribir las cabeceras de las columnas
+        archivo << "<tr><td></td>";
+        for (const auto& destino : destinosUnicos) {
+            archivo << "<td>" << destino << "</td>";
+        }
+        archivo << "</tr>\n";
+        
+        // Escribir las filas con los vuelos y los IDs de los pilotos
+        vueloPtr = vuelos;
+        while (vueloPtr) {
+            archivo << "<tr><td>" << vueloPtr->codigo << "</td>";
+            for (const auto& destino : destinosUnicos) {
+                archivo << "<td>";
+                Destino* destinoPtr = vueloPtr->destinos;
+                while (destinoPtr) {
+                    if (destinoPtr->nombre == destino) {
+                        PilotoID* pilotoPtr = destinoPtr->pilotos;
+                        while (pilotoPtr) {
+                            archivo << pilotoPtr->id << "<br/>";
+                            pilotoPtr = pilotoPtr->siguiente;
+                        }
+                    }
+                    destinoPtr = destinoPtr->siguiente;
+                }
+                archivo << "</td>";
+            }
+            archivo << "</tr>\n";
+            vueloPtr = vueloPtr->siguiente;
+        }
+
+        archivo << "</table>>];\n";
         archivo << "}\n";
         archivo.close();
 
         system("dot -Tpng matriz.dot -o matriz.png");
         system("start matriz.png");
     }
+
+       // system("dot -Tpng matriz.dot -o matriz.png");
+        //system("start matriz.png");
+    
 
     // Método para mostrar la matriz en consola
     void mostrarMatriz() {

@@ -59,6 +59,9 @@
         "sstream": "cpp",
         "valarray": "cpp",
         "variant": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "bitset": "cpp",
+        "set": "cpp",
+        "regex": "cpp"
     }
 }

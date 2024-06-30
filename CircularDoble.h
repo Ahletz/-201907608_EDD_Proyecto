@@ -139,81 +139,35 @@ class CircularDoble
         
     }
 
-     void Reporte() {
-        
-    // Crear un objeto de salida de archivo
+    // Método para generar el archivo .dot para Graphviz
+   void graficarLista() {
     std::ofstream archivo("listaCircularDoble.dot");
+    archivo << "digraph G {\n";
+    archivo << "node [shape=record];\n";
+    archivo << "rankdir=LR;\n";
 
-    // Verificar si el archivo se abrió correctamente
-    if (!archivo.is_open()) {
-        std::cerr << "No se pudo abrir el archivo para escribir." << std::endl;
-        return;
+    NodoCircularD* current = head;
+    if (current != nullptr) {
+        // Escribir los nodos individuales de la lista
+        do {
+            archivo << "\"" << current->numero_Registro << "\" [label=\"{" << current->numero_Registro << "}\"];\n";
+            archivo << "\"" << current->numero_Registro << "\" -> \"" << current->next->numero_Registro << "\" [dir=both];\n";
+            archivo << "\"" << current->numero_Registro << "\" -> \"" << current->prev->numero_Registro << "\" [dir=both];\n";
+            current = current->next;
+        } while (current != head);
+
+        // Conectar el último nodo con el primero para formar la lista circular
+        archivo << "\"" << current->numero_Registro << "\" -> \"" << head->numero_Registro << "\" [dir=both];\n";
     }
 
-    int contador = 0;
-
-    // Crear una variable string vacía
-    std::string contenido;
-
-    contenido += "digraph G {\n"
-                        "    rankdir=LR;\n"
-                        "    node [shape=record];\n";
-
-     if (head == nullptr)
-        {
-            std::cout<< "LISTA CIRCULAR VACIA, NO SE ENCUENTRA NINGUN ELEMENTO DENTRO!"<< std::endl;    
-            return;
-        }
-
-         NodoCircularD* current = head; //variuable currrent apuntador de la cabeza de la lista
-
-        //ciclo que recorre la lista
-        do
-        {   
-            //std::cout<< ""<< std::endl;
-
-            //llenar contenido
-            std::string nodo = std::to_string(contador); //numero del nodo
-
-           contenido += "nodo" + nodo + "[label=\""+current->numero_Registro+" \"];"; //contenido del nodo y creacion de los nodos
-
-            contador ++; //aumento del contador
-            current = current -> next; //cambiamos al siguiente nodo que este apuntando
-
-        } while (current != head); // si la variable ya no apunta a la cabeza y apunta a nulo termina ciclo
-
-        //llenando apuntadores
-        for ( int i = 0; i <= contador; i++)
-        {
-            contenido +="nodo"+std::to_string(i) +"->"+"nodo"+std::to_string(i+1)+";"; //apuntar al siguiente
-            
-        }
-
-        //llenado apuntadores regreso
-        for ( int i = contador; i >= 0; i--)
-        {
-            contenido +="nodo"+std::to_string(i) +"->"+"nodo"+std::to_string(i-1)+";"; //apuntar al anterior
-            
-        }
-
-        //ultimo apuntador inicio a final
-        
-        contenido +="nodo0 -> nodo"+std::to_string(contador-1)+";"; //apunta primero al ultimo
-
-        contenido +="nodo"+std::to_string(contador) +"->"+"nodo 0;"; //apunta ultimo al primero
-
-        contenido += "}" ;
-
-    // Escribir el contenido en el archivo
-    archivo << contenido;
-
-    // Cerrar el archivo
+    archivo << "}\n";
     archivo.close();
 
-   system("dot -Tpng listaCircularDoble.dot -o listaCircularDoble.png");
-   system("start listaCircularDoble.png");
-
+    system("dot -Tpng listaCircularDoble.dot -o listaCircularDoble.png");
+    system("start listaCircularDoble.png");
 }
+   
+
 
 //funcion recuperar datos 
 std::string ObtenerString(const std::string& numero_registro,const std::string& dato)
@@ -263,7 +217,7 @@ std::string ObtenerString(const std::string& numero_registro,const std::string& 
 }
 
 //obtener int
-int Obtenerint(const std::string& numero_registro,const std::string& dato)
+int Obtenerint(const std::string& numero_registro)
 {
     if (head == nullptr)
         {
@@ -277,12 +231,8 @@ int Obtenerint(const std::string& numero_registro,const std::string& dato)
         {        
            if (numero_registro == current->numero_Registro)
            {
-
-            if (dato == "capacidad")
-            {
+            
                 return current->capacidad;
-
-            }  
             
            }
 
