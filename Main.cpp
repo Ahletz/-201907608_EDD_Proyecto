@@ -344,6 +344,24 @@ void Consulta_horas()
      
 }
 
+void RutaMasCorta(){
+
+    //variables para pedir ruta
+    std::string origen;
+    std::string destino;
+
+    std::cout << "|| INGRESE UN ORIGEN: ";
+    std::cin >> origen;
+    std::cout << std:: endl; //salto de linea
+
+    std::cout << "|| INGRESE UN DESTINO: ";
+    std::cin >> destino;
+
+    adyascencia.encontrarRutaMasCorta(origen, destino); //se llama a la funcion destino para realizar la ruta
+
+
+}
+
 
 
 
@@ -399,6 +417,7 @@ int main(int argc, char const *argv[])
         
         case 6:
             std::cout << "|| OPCION 6. RECOMENDAR RUTA. ||" << std::endl; 
+            RutaMasCorta(); //funcion para llamar la ruta
             break;
         
         case 7:
