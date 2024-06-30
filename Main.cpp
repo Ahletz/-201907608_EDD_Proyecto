@@ -5,7 +5,8 @@
 #include "ArbolB.h" //incluimos el arbol B
 #include "ABB.h" //arbol binario de busqueda
 #include "Hash.h" //tabla hash
-#include "ListaD.h" //Lista de adyascencia 
+#include "ListaD.h" //Lista de adyascencia
+#include "Matriz.h" //matriz dispersa 
 
 using json = nlohmann::json;
 
@@ -16,6 +17,7 @@ BTree ArbolB (3);
 ArbolDeBusquedaBinaria Bb;
 TablaHash tabla;
 ListaEnlazadaD adyascencia; 
+MatrizDispersa matrix;
 
 //lectura archivos json aviones
 json leerJSON_Aviones() {
@@ -58,6 +60,8 @@ json leerJSON_Aviones() {
         std::string estado = aviones["estado"];
         std::string destino = aviones["ciudad_destino"];
 
+
+        matrix.agregarVueloDestino(vuelo, destino); //crear vuelos y destinos (filas y columnas) en la matriz dispersa
         
 
         if (estado == "Disponible")
@@ -127,6 +131,9 @@ json leerJSON_Pilotos() {
         int horas = piloto["horas_de_vuelo"];
         std::string vuelo = piloto["vuelo"];
         std::string licencia = piloto["tipo_de_licencia"];
+
+        //AGREGAR LOS ID DE LOS PILOTOS A LA MATRIZ DISPERSA
+        matrix.agregarPiloto(id,vuelo);
 
         //AGREGAR A ESTRUCTURAS
         Piloto datos ={nombre, nacionalidad,id,vuelo,licencia,horas};
@@ -198,10 +205,10 @@ void Mensaje()
     std::cout << "|| 1. CARGAR AVIONES.             ||" << std::endl; //carga de archivo, falta implementacion de estructuras (arbol b y lista cricular)
     std::cout << "|| 2. CARGAR PILOTOS.             ||" << std::endl; //implementacion de tabla hash y arbol bb 
     std::cout << "|| 3. CARGA RUTAS.                ||" << std::endl; //se agrego una lista de adyascencia 
-    std::cout << "|| 4. CARGAR MOVIMIENTOS.         ||" << std::endl; //falta
+    std::cout << "|| 4. CARGAR MOVIMIENTOS.         ||" << std::endl; //falta (ya lo tengo, solo falta agregarlo)
     std::cout << "|| 5. CONSULTA HORAS DE VUELO.    ||" << std::endl; //agregar ordenes para mostrar datos en arbol bb
     std::cout << "|| 6. RECOMENDAR RUTA             ||" << std::endl; //falta
-    std::cout << "|| 7. VISUALIZAR REPORTES.        ||" << std::endl; //reporte arbol b, lista circular, tabla hash y grafo rutas 
+    std::cout << "|| 7. VISUALIZAR REPORTES.        ||" << std::endl; //reporte arbol b, lista circular, tabla hash, grafo ruta y matriz
     std::cout << "|| 8. SALIR.                      ||" << std::endl; //salida exitosa
 
 }
@@ -309,6 +316,7 @@ int main(int argc, char const *argv[])
             ArbolB.graphviz("ArbolB.dot");
             tabla.graficar("Hash.dot");
             adyascencia.graficarGrafo("grafo.dot");
+            matrix.graficarMatriz();
             
             return 0;
             break;

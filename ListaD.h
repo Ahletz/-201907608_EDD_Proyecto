@@ -3,12 +3,7 @@
 
 #include <iostream>
 #include <string>
-#include <vector>
-#include <climits>
-#include <unordered_map>
-#include <set>
 #include <fstream>
-#include <algorithm>
 
 using namespace std;
 
@@ -42,60 +37,6 @@ public:
         NodoD* nuevoNodo = new NodoD(ruta);
         nuevoNodo->siguiente = cabeza;
         cabeza = nuevoNodo;
-    }
-
-    // Método para encontrar la ruta óptima
-    pair<vector<string>, int> rutaOptima(string inicio, string fin) {
-        // Construir el grafo
-        unordered_map<string, vector<pair<string, int>>> grafo;
-        NodoD* actual = cabeza;
-        while (actual != nullptr) {
-            grafo[actual->ruta.origen].push_back({actual->ruta.destino, actual->ruta.distancia});
-            grafo[actual->ruta.destino].push_back({actual->ruta.origen, actual->ruta.distancia}); // Si es bidireccional
-            actual = actual->siguiente;
-        }
-
-        // Algoritmo de Dijkstra
-        unordered_map<string, int> distancias;
-        unordered_map<string, string> predecesores;
-        set<pair<int, string>> cola;
-
-        for (const auto& par : grafo) {
-            distancias[par.first] = INT_MAX;
-        }
-
-        distancias[inicio] = 0;
-        cola.insert({0, inicio});
-
-        while (!cola.empty()) {
-            auto [dist, nodo] = *cola.begin();
-            cola.erase(cola.begin());
-
-            for (const auto& vecino : grafo[nodo]) {
-                auto [vecinoNodo, peso] = vecino;
-                if (dist + peso < distancias[vecinoNodo]) {
-                    cola.erase({distancias[vecinoNodo], vecinoNodo});
-                    distancias[vecinoNodo] = dist + peso;
-                    predecesores[vecinoNodo] = nodo;
-                    cola.insert({distancias[vecinoNodo], vecinoNodo});
-                }
-            }
-        }
-
-        // Reconstruir el camino
-        vector<string> camino;
-        string actualNodo = fin;
-        while (actualNodo != inicio) {
-            camino.push_back(actualNodo);
-            actualNodo = predecesores[actualNodo];
-            if (actualNodo == "") {
-                return {{}, -1}; // No se encontró camino
-            }
-        }
-        camino.push_back(inicio);
-        reverse(camino.begin(), camino.end());
-
-        return {camino, distancias[fin]};
     }
 
     // Método para mostrar la lista de rutas
