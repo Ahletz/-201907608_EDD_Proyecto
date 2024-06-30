@@ -76,12 +76,19 @@ public:
 
     void graficar(ofstream& archivo, int indice) const {
         Nodo* actual = cabeza;
-        archivo << "node" << indice << " [label=\"{Índice " << indice << "|";
-        while (actual != nullptr) {
-            archivo << actual->piloto.numero_de_id << "\\n";
-            actual = actual->siguiente;
+        string nodoCabecera = "index" + to_string(indice);
+        archivo << nodoCabecera << " [label=\"Índice " << indice << "\"];\n";
+        
+        if (actual != nullptr) {
+            string nodoAnterior = nodoCabecera;
+            while (actual != nullptr) {
+                string nodoActual = "node" + to_string(indice) + "_" + actual->piloto.numero_de_id;
+                archivo << nodoActual << " [label=\"" << actual->piloto.numero_de_id << "\"];\n";
+                archivo << nodoAnterior << " -> " << nodoActual << ";\n";
+                nodoAnterior = nodoActual;
+                actual = actual->siguiente;
+            }
         }
-        archivo << "}\"];\n";
     }
 };
 
@@ -131,9 +138,11 @@ public:
         ofstream archivo(filename);
         archivo << "digraph G {\n";
         archivo << "node [shape=record];\n";
+
         for (int i = 0; i < tamanio; ++i) {
             tabla[i].graficar(archivo, i);
         }
+
         archivo << "}\n";
         archivo.close();
 

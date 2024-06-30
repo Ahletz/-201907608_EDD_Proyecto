@@ -15,7 +15,7 @@
         "capacidad": 180,
         "aerolinea": "AirlineX",
         "ciudad_destino": "Madrid",
-        "estado": "Disponible"
+        "estado": "Mantenimiento"
     },
     {
         "vuelo": "V702",
@@ -87,7 +87,7 @@
         "capacidad": 242,
         "aerolinea": "AirlineZ",
         "ciudad_destino": "Zaragoza",
-        "estado": "Disponible"
+        "estado": "Mantenimiento"
     },
     {
         "vuelo": "V710",
@@ -132,7 +132,7 @@
         "capacidad": 242,
         "aerolinea": "AirlineZ",
         "ciudad_destino": "Córdoba",
-        "estado": "Disponible"
+        "estado": "Mantenimiento"
     },
     {
         "vuelo": "V715",
