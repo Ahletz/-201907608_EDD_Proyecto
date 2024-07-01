@@ -423,12 +423,15 @@ int main(int argc, char const *argv[])
         case 7:
 
             std::cout << "|| OPCION 7. VISUALIZAR REPORTES. ||" << std::endl; 
+            matrix.mostrarMatriz();
             Circular.graficarLista();
             ArbolB.graphviz("ArbolB.dot");
             tabla.graficar("Hash.dot");
             adyascencia.graficarGrafo("grafo.dot");
             matrix.graficarMatriz();
+            matrix.graficarMatriz2();
             Bb.graficarArbol("Arbolbb.dot");
+            
             
             return 0;
             break;

@@ -138,10 +138,113 @@ public:
     }
 
     
-    // Método para graficar la matriz usando Graphviz en formato de matriz
+   
     // Método para graficar la matriz usando Graphviz en formato de matriz
     void graficarMatriz() {
-        std::ofstream archivo("matriz.dot");
+    std::ofstream archivo("matriz.dot");
+    archivo << "digraph Sparse_Matrix {\n";
+    archivo << "node [shape=box];\n";
+    archivo << "Mt[ label = \"Matrix\", width = 1.5, style = filled, fillcolor = firebrick1, group = 1 ];\n";
+    archivo << "e0[ shape = point, width = 0 ];\n";
+    archivo << "e1[ shape = point, width = 0 ];\n";
+
+    // Recopilar todos los destinos únicos y vuelos
+    std::set<std::string> destinosUnicos;
+    std::set<std::string> vuelosUnicos;
+    VueloX* vueloPtr = vuelos;
+    while (vueloPtr) {
+        Destino* destinoPtr = vueloPtr->destinos;
+        vuelosUnicos.insert(vueloPtr->codigo);
+        while (destinoPtr) {
+            destinosUnicos.insert(destinoPtr->nombre);
+            destinoPtr = destinoPtr->siguiente; // Movido aquí para avanzar al siguiente destino
+        }
+        vueloPtr = vueloPtr->siguiente;
+    }
+
+    // Escribir los nodos U (vuelos)
+    int i = 0;
+    for (const auto& vuelo : vuelosUnicos) {
+        archivo << "U" << i << " [label = \"" << vuelo << "\", width = 1.5, style = filled, fillcolor = bisque1, group = 1 ];\n";
+        i++;
+    }
+
+    // Escribir los nodos A (destinos)
+    i = 0;
+    for (const auto& destino : destinosUnicos) {
+        archivo << "A" << i << " [label = \"" << destino << "\", width = 1.5, style = filled, fillcolor = lightskyblue, group = " << (i + 2) << " ];\n";
+        i++;
+    }
+
+    // Relaciones entre nodos U (vuelos)
+    for (int j = 0; j < vuelosUnicos.size() - 1; j++) {
+        archivo << "U" << j << " -> U" << (j + 1) << ";\n";
+        archivo << "U" << (j + 1) << " -> U" << j << ";\n";
+    }
+
+    // Relaciones entre nodos A (destinos)
+    for (int j = 0; j < destinosUnicos.size() - 1; j++) {
+        archivo << "A" << j << " -> A" << (j + 1) << ";\n";
+        archivo << "A" << (j + 1) << " -> A" << j << ";\n";
+    }
+
+    archivo << "Mt -> U0;\n";
+    archivo << "Mt -> A0;\n";
+    archivo << "{ rank = same; Mt; ";
+    for (int j = 0; j < destinosUnicos.size(); j++) {
+        archivo << "A" << j << "; ";
+    }
+    archivo << "}\n";
+
+    // Escribir los nodos N (pilotos) y sus relaciones con U y A
+vueloPtr = vuelos;
+int vueloIdx = 0;
+while (vueloPtr) {
+    int destinoIdx = 0;
+    Destino* destinoPtr = vueloPtr->destinos;
+    while (destinoPtr) {
+        PilotoID* pilotoPtr = destinoPtr->pilotos;
+        while (pilotoPtr) {
+            // Construir el nombre único para el nodo N
+            std::string nodoN = "N" + std::to_string(vueloIdx) + "_L" + destinoPtr->nombre + "_P" + pilotoPtr->id;
+            
+            // Escribir el nodo N con su etiqueta
+            archivo << nodoN << " [label = \"" << pilotoPtr->id << "\", width = 1.5, group = " << (destinoIdx + 2) << " ];\n";
+            
+            // Relacionar el nodo N con el nodo U correspondiente (vuelo)
+            archivo << "U" << vueloIdx << " -> " << nodoN << ";\n";
+            
+            // Relacionar el nodo N con el nodo A correspondiente (destino)
+            archivo << "A" << destinoIdx << " -> " << nodoN << ";\n";
+            
+            // Si hay un siguiente piloto, establecer la relación bidireccional
+            if (pilotoPtr->siguiente) {
+                archivo << nodoN << " -> N" << vueloIdx << "_L" << destinoPtr->nombre << "_P" << pilotoPtr->siguiente->id << ";\n";
+                archivo << "N" << vueloIdx << "_L" << destinoPtr->nombre << "_P" << pilotoPtr->siguiente->id << " -> " << nodoN << ";\n";
+            }
+            
+            pilotoPtr = pilotoPtr->siguiente;
+        }
+        destinoPtr = destinoPtr->siguiente;
+        destinoIdx++;
+    }
+    vueloPtr = vueloPtr->siguiente;
+    vueloIdx++;
+}
+
+    archivo << "}\n";
+    archivo.close(); 
+
+    system("dot -Tpng matriz.dot -o matriz.png");
+    system("start matriz.png");
+}
+        //system("dot -Tpng matriz.dot -o matriz.png");
+        //system("start matriz.png");
+
+
+     // Método para graficar la matriz usando Graphviz en formato de matriz
+    void graficarMatriz2() {
+        std::ofstream archivo("matriz2.dot");
         archivo << "digraph G {\n";
         archivo << "node [shape=plaintext];\n";
         archivo << "tabla [label=<\n";
@@ -193,12 +296,9 @@ public:
         archivo << "}\n";
         archivo.close();
 
-        system("dot -Tpng matriz.dot -o matriz.png");
-        system("start matriz.png");
+        system("dot -Tpng matriz2.dot -o matriz2.png");
+        system("start matriz2.png");
     }
-
-       // system("dot -Tpng matriz.dot -o matriz.png");
-        //system("start matriz.png");
     
 
     // Método para mostrar la matriz en consola
