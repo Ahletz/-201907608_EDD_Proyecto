@@ -237,7 +237,7 @@ void leerMovimientos() {
 
             std::cout << "Mantenimiento: " << segundo << ", ID: " << tercero << std::endl;
 
-            if (segundo == "Ingreso") //cambio de circular doble a albol b
+            if (segundo == "Salida") //cambio de circular doble a albol b
             {
                 std::cout << "INGRESO: " << segundo << ", ID: " << tercero << std::endl;
 
@@ -253,7 +253,7 @@ void leerMovimientos() {
                 ArbolB.insert(dato); //se agrega al arbol b
 
                 Circular.eliminar(tercero); //se elimina de la lista circular doble
-            }else if (segundo == "Salida")
+            }else if (segundo == "Ingreso")
             {
                 Avion dato = ArbolB.remove(tercero); //eliminamos y capturamos los datos del arbol b
 
