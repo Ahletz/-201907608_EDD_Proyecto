@@ -248,7 +248,7 @@ void leerMovimientos() {
                 std::string destino = Circular.ObtenerString(tercero,"destino");
                 int capacidad = Circular.Obtenerint(tercero);
 
-                Avion dato = {vuelo, tercero, modelo, capacidad, aerolinea, destino, "Disponible"}; //se crea una estructura avion
+                Avion dato = {vuelo, tercero, modelo, capacidad, aerolinea, destino, "Mantenimiento"}; //se crea una estructura avion
 
                 ArbolB.insert(dato); //se agrega al arbol b
 
@@ -257,7 +257,7 @@ void leerMovimientos() {
             {
                 Avion dato = ArbolB.remove(tercero); //eliminamos y capturamos los datos del arbol b
 
-                std::string estado = "Mantenimiento";
+                std::string estado = "Disponible";
 
                 Circular.agregar(dato.vuelo,tercero,dato.modelo,dato.capacidad,dato.aerolinea, estado, dato.ciudad_destino); //se agrega a la lista doble circular
             }
